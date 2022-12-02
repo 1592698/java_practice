@@ -1,0 +1,6 @@
+===================================
+예외 발생시간 : Thu Dec 01 11:01:13 GMT+09:00 2022
+java.lang.ArithmeticException: / by zero
+	at javaPractice.ch_14_exeption.Test12.main(Test12.java:23)
+예외 메시지 : / by zero
+===================================
