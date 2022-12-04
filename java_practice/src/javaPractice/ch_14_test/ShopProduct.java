@@ -6,6 +6,8 @@ package javaPractice.ch_14_test;
     상품은 실행 예에 나오는 상품 3개만 입력하십시요. */
 
 public class ShopProduct {
+	int price; int productID; int cnt;
+	
 	Product[] products = new Product[3]; 
 	
 	ShopProduct() {
@@ -21,9 +23,11 @@ public class ShopProduct {
 		 
             System.out.println("상품 코드: " +products[i].getProductID()
                     + ", 상품이름: " + products[i].getProductName() + ", 가격: " + products[i].getPrice());
-        }
+        
+	 
+	 }
 	}
-	
+
 	
 	
 	

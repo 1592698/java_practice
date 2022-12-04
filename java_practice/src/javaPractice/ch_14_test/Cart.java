@@ -2,16 +2,16 @@ package javaPractice.ch_14_test;
 
 public class Cart {
 	
-	ShopProduct p;
+	ShopProduct p; 
 	int productID, cnt;
 	String productName;
 	int price;
 	
-	Cart(int productID, int cnt){
-	
-		this.productID=productID; //상품 코드
-		this.cnt=cnt; //구매개수
-	}
+//	Cart(int productID, int cnt){
+//	
+//		this.productID=productID; //상품 코드
+//		this.cnt=cnt; //구매개수
+//	}
 	
 	 Cart(int productID, int cnt, String productName) {
 		
@@ -21,11 +21,22 @@ public class Cart {
 		this.productName=productName;  //상품이름
 	}
 	 
-	 public String toString() {
-		 
+	
+
+	public String toString() {
+		 //장바구니에 담은 상품 목록 출력시에 상품 이름이 나오도록
+		 //-> 장바구니에 담을 때 상품 이름이 저장되도록 할 것인지 혹은 출력시에 불러 올 것인지 정해서 코드
+		 //장바구니에 담은 상품 목록 출력시에 개별 상품의 합계 금액이 나오도록 (개수 * 단가)
 		return  "상품번호: "+ productID + ", 개수: " + cnt +", 상품이름: "+ p.products[productID-1].getProductName()
-				+"\n개별 총 가격 : " + (cnt *p.products[productID-1].getPrice()) ;
+				+"\n개별 총 가격 : " + cnt *p.products[productID-1].getPrice();
 	 }
-	 
-	 
+
+
+	
+
+
+	  
+	
+	
 }
+

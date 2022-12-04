@@ -4,12 +4,14 @@ import java.util.Scanner;
 
 public class Test {
 
+
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
 		Scanner stdIn = new Scanner(System.in); //콘솔 입력 사용
 		ShopProduct sp = new ShopProduct(); //상품관련
 		ShopCart sc = new ShopCart(); 
+		
 		
 		
 		System.out.println("01. 회원가입 시작");
@@ -45,8 +47,8 @@ public class Test {
 		sc.selectProduct(); //상품 선택
 		System.out.println("장바구니에 담은 상품은 아래와 같습니다.");
 		sc.printCart(); //장바구니에 담은 상품 출력
-		System.out.println("03. 장바구니 종료");
 		
+		System.out.println("03. 장바구니 종료");
 		System.out.println("");
 	}
 
