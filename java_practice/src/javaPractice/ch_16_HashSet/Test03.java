@@ -23,6 +23,7 @@ class MemberShip{
 		return name.hashCode()+ age; //String의 hashCode() 이용
 	}
 
+	
 	@Override
 	public boolean equals(Object obj) {//name과 age값이 같으면 true 리턴
 		//name과 age값이 같으면 true 반환
