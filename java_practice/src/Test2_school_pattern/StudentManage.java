@@ -5,7 +5,6 @@ import java.util.ArrayList;
 
 import java.util.Scanner;
 
-import javaPractice.ch_18_school_pattern.Student;
 
 public class StudentManage {
 

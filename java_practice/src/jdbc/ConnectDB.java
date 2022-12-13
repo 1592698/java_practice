@@ -34,13 +34,13 @@ class DB {
 			getClass().forName(dirver);//JDBC 드라이버 등록
 			conn = DriverManager.getConnection(DB_URL,DB_USER, DB_PASS); //디비 연결
 			if(conn!=null) {
-				System.out.println("DB 점속 성공");
+				System.out.println("DB 접속 성공");
 			}
 		}catch (ClassNotFoundException e) {
 			System.out.println("드라이버 로드 실패");
 			e.printStackTrace();
 		}catch(SQLException e) {
-			System.out.println("DB 점속 실패");
+			System.out.println("DB 접속 실패");
 			e.printStackTrace();
 		}
 	}
