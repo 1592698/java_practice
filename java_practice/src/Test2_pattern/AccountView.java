@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import javaPractice.ch_18_pattern.Account;
+
 class AccountManager{
 
 	private ArrayList<Account> list;
@@ -19,7 +21,23 @@ class AccountManager{
 		list = new ArrayList<Account>();
 		stdIn = new Scanner(System.in);
 	}
-	                                                                                                                  
+	//해당계좌찾기
+	private Account findAccountTraverse(int id) {
+		for(Account account : list) {
+			if(account.getId()==id) { //동일한 계좌가 있다면
+				return account;
+			}
+		}
+		return null;
+	}
+	private Account findAccount(int id) { 
+		//입금,출금,조회시에 계좌찾기
+		Account account =findAccountTraverse(id);
+		if(account == null) {
+			System.out.println("계좌를 찾을 수 없습니다");
+		}
+		return account;
+	}
 	//디비 관련 시작
 	private void getConnection() { //디비 연결
 		try {
@@ -96,6 +114,70 @@ class AccountManager{
 		return res;
 	}	
 	
+	private boolean updateBalance(int id, long money, boolean flag) {
+		//입금 출금
+		//flag true: 입금, false 출금
+		Statement statement = null;
+		boolean res= false;
+		int upd =0;
+		try {
+			String sql;
+			if(flag) {
+				sql = String.format("UPDATE account SET balance = balance + %d WHERE (id = %d)", money, id);
+			}
+			else {
+				sql = String.format("UPDATE account SET balance = balance - %d WHERE (id = %d)", money, id);
+			}
+			//System.out.println(sql);
+			statement = connection.createStatement();
+			upd=statement.executeUpdate(sql); //수정된거 반환
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+			try {
+				if(statement != null) {
+					statement.close();
+				}
+			}catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		res = (upd == 0)? false : true;
+		return res;
+	}
+	
+	private Account selectOne(int id) {
+		//계좌 번호를 받아 정보 전달
+		Statement statement = null;
+		Account account = null;
+		try {
+			String sql = "SELECT * FROM account WHERE id = '" + id + "'";
+			System.out.println(sql);
+			statement =connection.createStatement();
+			ResultSet resultSet = statement.executeQuery(sql);
+			
+			if(resultSet.next()) {
+				account = new Account();
+				account.setId(resultSet.getInt("id"));
+				account.setName(resultSet.getString("name"));
+				account.setBalance(resultSet.getInt("balance"));
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				if(statement !=null) {
+					statement.close();
+				}
+			}catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return account;
+	}
+	
 	private ArrayList<Account> selectAll(){
 		//전체 정보 전달
 		Statement statement =null;
@@ -154,14 +236,28 @@ class AccountManager{
 		long money = stdIn.nextLong();
 		
 		//해당 계좌 찾기
-		for(Account account : list) {
-			if(account.getId()==id) { //동일한 계좌가 있다면
-				account.setBalance(money+account.getBalance());
-				System.out.println("입금완료 되었습니다");
-				return;
-			}
+//		for(Account account : list) {
+//			if(account.getId()==id) { //동일한 계좌가 있다면
+//				account.setBalance(money+account.getBalance());
+//				System.out.println("입금완료 되었습니다");
+//				selectOne(id);
+//			}
+//		}
+//		System.out.println("해당 계좌번호가 존재하지 않습니다");
+		
+		//해당 계좌 찾기
+		if(isAccount(id)) {
+			updateBalance(id, money, true);
+				System.out.println("입금 완료되었습니다.");
 		}
-		System.out.println("해당 계좌번호가 존재하지 않습니다");
+		else {
+			System.out.println("해당 계좌가 존재하지 않습니다.");
+		}
+//		Account account = findAccount(id);
+//		if(account !=null) {
+//			account.setBalance(money + account.getBalance());
+//			System.out.println("입금 완료되었습니다.");
+//		}
 	}
 
 	public void withdraw() {//출금
@@ -171,36 +267,55 @@ class AccountManager{
 		System.out.println("출금액");
 		long money = stdIn.nextLong();
 		
-	//해당 계좌 찾기
-		for(Account account : list) {
-			if(account.getId()==id) { //동일한 계좌가 있다면
-				if(account.getBalance()<money) {
-					System.out.println("잔액 부족");
+		//해당계좌 찾기
+		if(isAccount(id)) {
+			Account account = selectOne(id);
+			if(account.getBalance()<money) {
+				System.out.println("잔액부족");
 			}
-				else {
-					account.setBalance(account.getBalance()-money);
-				}
-				return;
+			else {
+				updateBalance(id, money, false);
+				System.out.println("출금완료");
 			}
+			return;
 		}
-		System.out.println("해당 계좌번호가 존재하지 않습니다");
+		else {
+			System.out.println("해당 계좌번호가 존재하지 않습니다");
+		}
+	//해당 계좌 찾기
+//		for(Account account : list) {
+//			if(account.getId()==id) { //동일한 계좌가 있다면
+//				if(account.getBalance()<money) {
+//					System.out.println("잔액 부족");
+//			}
+//				else {
+//					account.setBalance(account.getBalance()-money);
+//				}
+//				return;
+//			}
+//		}
+//		System.out.println("해당 계좌번호가 존재하지 않습니다");
+		
 	}
 	
 	public void inquire() { //잔액조회
 		System.out.println("계좌번호: ");
 		int id = stdIn.nextInt();
 		
+		Account account = selectOne(id);
 		//해당 계좌 찾기
-		for(Account account : list) {
-			if(account.getId()==id) { //동일한 계좌가 있다면
-				System.out.println(account.getId() + "\t" + account.getName()+"\t" + account.getBalance());
-				return;
-			}
+//		for(Account account : list) {
+//		if(account.getId()==id) { //동일한 계좌가 있다면
+//			System.out.println(account.getId() + "\t" + account.getName()+"\t" + account.getBalance());
+//			return;
+//		}
+//	}
+		if(account !=null) {
+			System.out.println(account.getId() + "\t" + account.getName() + "\t" + account.getBalance());
+		}else{
+			System.out.println("해당 계좌번호가 존재하지 않습니다");
 		}
-		System.out.println("해당 계좌번호가 존재하지 않습니다");
 	}
-	
-
 	public void display() {  //출금
 	
 		ArrayList<Account>list = selectAll();
@@ -225,7 +340,6 @@ public class AccountView {
 			case 1:
 				
 				manager.makeAccount();
-				
 				break;
 			case 2:
 				manager.deposit();

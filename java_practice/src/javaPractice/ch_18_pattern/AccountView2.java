@@ -10,6 +10,7 @@ class AccountManager{
 
 	private ArrayList<Account> list;
 	private Scanner stdIn;
+	
 	public AccountManager() {
 		list = new ArrayList<Account>();
 		stdIn = new Scanner(System.in);
