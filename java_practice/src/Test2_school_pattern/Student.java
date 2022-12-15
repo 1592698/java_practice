@@ -13,6 +13,9 @@ public class Student extends Person{
 		//학번을 매개 변수로 받아서 현재 학생의 학번을 설정한다.
 		this.studentNumber=studentNumber;
 	}
+	public Student() {
+		// TODO Auto-generated constructor stub
+	}
 	public boolean[] getClassCheck() {
 		return classCheck;
 	}
@@ -30,5 +33,9 @@ public class Student extends Person{
 	}
 	public void setStudentNumber(int studentNumber) {
 		this.studentNumber = studentNumber;
+	}
+	public void setPhoneNumber(int nextInt) {
+		// TODO Auto-generated method stub
+		
 	}
 }
